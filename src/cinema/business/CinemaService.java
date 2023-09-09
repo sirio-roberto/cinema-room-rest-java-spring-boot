@@ -5,8 +5,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CinemaService {
-    @Autowired
-    private Cinema cinema;
+    private final Cinema cinema;
+
+    public CinemaService(Cinema cinema) {
+        this.cinema = cinema;
+    }
 
     public Cinema getCinema() {
         return cinema;

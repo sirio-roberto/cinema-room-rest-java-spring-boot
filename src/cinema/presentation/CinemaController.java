@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController("api/v1")
 public class CinemaController {
-    @Autowired
-    private CinemaService service;
+    private final CinemaService service;
+
+    public CinemaController(CinemaService service) {
+        this.service = service;
+    }
 
     @GetMapping("seats")
     ResponseEntity<Cinema> getSeats() {
