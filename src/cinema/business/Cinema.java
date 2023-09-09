@@ -1,10 +1,12 @@
 package cinema.business;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class Cinema {
     @JsonProperty("total_rows")
     private final int ROWS = 9;
