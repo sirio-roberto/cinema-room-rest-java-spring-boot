@@ -4,11 +4,13 @@ import cinema.business.dto.SeatDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class CinemaService {
     private final Cinema cinema;
-    private List<PurchasedTicket> boughtTickets = Collections.synchronizedList(new ArrayList<>());
+    private final List<PurchasedTicket> boughtTickets = Collections.synchronizedList(new ArrayList<>());
+    private final Map<String, Integer> stats = new ConcurrentHashMap<>();
 
     public CinemaService(Cinema cinema) {
         this.cinema = cinema;
@@ -50,5 +52,21 @@ public class CinemaService {
             }
         }
         return null;
+    }
+
+    public Map<String, Integer> getStats() {
+        int currentIncome = boughtTickets.stream()
+                .map(PurchasedTicket::getTicket)
+                .map(Seat::getPrice)
+                .reduce(Integer::sum)
+                .orElse(0);
+
+        int availableSeats = getCinema().getAvailableSeats().size();
+        int purchasedTickets = boughtTickets.size();
+
+        stats.put("current_income", currentIncome);
+        stats.put("number_of_available_seats", availableSeats);
+        stats.put("number_of_purchased_tickets", purchasedTickets);
+        return stats;
     }
 }

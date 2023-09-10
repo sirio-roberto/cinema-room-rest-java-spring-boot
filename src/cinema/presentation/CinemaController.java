@@ -5,18 +5,11 @@ import cinema.business.CinemaService;
 import cinema.business.PurchasedTicket;
 import cinema.business.Seat;
 import cinema.business.dto.SeatDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
-import java.util.Objects;
 
 @RestController("api/v1")
 public class CinemaController {
@@ -57,5 +50,15 @@ public class CinemaController {
         }
         return ResponseEntity.ok()
                 .body(Map.of("returned_ticket", returnedSeat));
+    }
+
+    @GetMapping("stats")
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<Object> getStats(@RequestParam(required = false) String password) {
+        if ("super_secret".equals(password)) {
+            return ResponseEntity.ok(service.getStats());
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("error", "The password is wrong!"));
     }
 }
