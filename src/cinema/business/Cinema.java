@@ -4,17 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Component
 public class Cinema {
-    @JsonProperty("total_rows")
     private final int ROWS = 9;
-
-    @JsonProperty("total_columns")
     private final int COLUMNS = 9;
-
-    @JsonProperty("available_seats")
     private final List<Seat> AVAILABLE_SEATS;
 
     public Cinema() {
@@ -25,12 +21,26 @@ public class Cinema {
         List<Seat> seats = new ArrayList<>();
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLUMNS; j++) {
-                Seat seat = new Seat(i + 1, j + 1);
+                int price = i < 4 ? 10 : 8;
+                Seat seat = new Seat(i + 1, j + 1, price);
                 seats.add(seat);
             }
         }
-        return seats;
+        return Collections.synchronizedList(seats);
     }
 
+    @JsonProperty("total_rows")
+    public int getRows() {
+        return ROWS;
+    }
 
+    @JsonProperty("total_columns")
+    public int getColumns() {
+        return COLUMNS;
+    }
+
+    @JsonProperty("available_seats")
+    public List<Seat> getAvailableSeats() {
+        return AVAILABLE_SEATS;
+    }
 }

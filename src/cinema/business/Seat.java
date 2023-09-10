@@ -9,9 +9,13 @@ public class Seat {
     @JsonProperty("column")
     private final int COLUMN;
 
-    public Seat(int row, int column) {
+    @JsonProperty("price")
+    private final int PRICE;
+
+    public Seat(int row, int column, int price) {
         this.ROW = row;
         this.COLUMN = column;
+        this.PRICE = price;
     }
 
     public int getRow() {
@@ -20,5 +24,9 @@ public class Seat {
 
     public int getColumn() {
         return COLUMN;
+    }
+
+    public int getPrice() {
+        return PRICE;
     }
 }
