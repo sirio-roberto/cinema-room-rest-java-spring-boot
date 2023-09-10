@@ -2,6 +2,7 @@ package cinema.presentation;
 
 import cinema.business.Cinema;
 import cinema.business.CinemaService;
+import cinema.business.PurchasedTicket;
 import cinema.business.Seat;
 import cinema.business.dto.SeatDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,13 +35,13 @@ public class CinemaController {
     @PostMapping("purchase")
     public ResponseEntity<Object> purchaseTicket(@RequestBody SeatDTO dto) {
         try {
-            Seat seat = service.purchaseTicket(dto);
-            if (seat == null) {
+            PurchasedTicket ticket = service.purchaseTicket(dto);
+            if (ticket == null) {
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "The ticket has been already purchased!"));
             }
             return ResponseEntity.ok()
-                    .body(seat);
+                    .body(ticket);
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest()
                     .body(Map.of("error", ex.getMessage()));
