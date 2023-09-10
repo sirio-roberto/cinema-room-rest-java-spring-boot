@@ -47,4 +47,15 @@ public class CinemaController {
                     .body(Map.of("error", ex.getMessage()));
         }
     }
+
+    @PostMapping("return")
+    public ResponseEntity<Object> returnTicket(@RequestBody Map<String, String> token) {
+        Seat returnedSeat = service.returnTicket(token);
+        if (returnedSeat == null) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Wrong token!"));
+        }
+        return ResponseEntity.ok()
+                .body(Map.of("returned_ticket", returnedSeat));
+    }
 }

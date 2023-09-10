@@ -3,9 +3,7 @@ package cinema.business;
 import cinema.business.dto.SeatDTO;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class CinemaService {
@@ -33,6 +31,22 @@ public class CinemaService {
                 boughtTickets.add(ticket);
                 cinema.getAvailableSeats().remove(seat);
                 return ticket;
+            }
+        }
+        return null;
+    }
+
+    public Seat returnTicket(Map<String, String> token) {
+        if (token == null || token.get("token") == null) {
+            return null;
+        }
+        UUID tokenValue = UUID.fromString(token.get("token"));
+        for (PurchasedTicket ticket : boughtTickets) {
+            if (Objects.equals(tokenValue, ticket.getToken())) {
+                Seat seat = ticket.getTicket();
+                cinema.getAvailableSeats().add(seat);
+                boughtTickets.remove(ticket);
+                return seat;
             }
         }
         return null;
